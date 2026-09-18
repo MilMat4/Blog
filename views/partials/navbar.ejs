@@ -1,0 +1,40 @@
+<nav class="navbar">
+
+    <a href="/" class="logo">My Blog</a>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/posts">Posts</a>
+
+
+        <% if (session && session.userId) { %>
+
+            <% if (session.role === "superadmin") { %>
+
+                <a href="/admin/users">
+                    Manage Users
+                </a>
+
+            <% } %>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        <% } else { %>
+
+            <a href="/login">
+                Login
+            </a>
+
+            <a href="/signup">
+                Signup
+            </a>
+
+        <% } %>
+
+    </div>
+
+</nav>
