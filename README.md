@@ -148,7 +148,16 @@ The admin users page is available at:
 /admin/users
 ```
 
-To assign a user as a superadmin, update the role field in MongoDB for that user document.
+Example superadmin account for testing:
+
+```text
+Email: superadmin@example.com
+Password: SuperAdmin123!
+```
+
+You can use this account to sign in and test the admin-only features immediately.
+
+To assign a user as a superadmin manually in MongoDB, update the role field for that user document to `superadmin`.
 
 ## Notes
 
