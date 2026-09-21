@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Coastal notes</title>
+  <desc id="desc">Layered blue waves beneath a golden sun.</desc>
+  <rect width="1200" height="800" fill="#f7e8c7"/>
+  <circle cx="890" cy="185" r="105" fill="#e7a74f"/>
+  <path d="M0 410c150-100 260 90 420-15s280-60 390 5 230 60 390-45v445H0z" fill="#244e5a"/>
+  <path d="M0 505c160-90 260 65 425-30s265-25 390 35 245 42 385-40v330H0z" fill="#347b86"/>
+  <path d="M0 620c190-80 275 42 445-25s250-5 375 47 245 24 380-30v188H0z" fill="#85b9ab"/>
+  <path d="M0 690c170-55 280 25 430-20s270 0 395 38 250 12 375-20v112H0z" fill="#d5dfbd"/>
+  <path d="M130 580c70-50 135-55 205-15M485 525c85-55 160-45 230 5M800 585c75-50 150-45 225 0" fill="none" stroke="#f7e8c7" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+  <path d="M160 275h360v28H160zM160 335h250v28H160z" fill="#244e5a" opacity=".7"/>
+</svg>

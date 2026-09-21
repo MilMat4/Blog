@@ -19,86 +19,137 @@
 
 <body>
 
-
     <%- include("../partials/navbar") %>
 
 
-    <main class="auth-page">
+    <main class="post-form-page">
 
-        <h1>
-            Edit Post
-        </h1>
+        <div class="post-form-card">
+
+            <p class="posts-eyebrow">
+                UPDATE YOUR STORY
+            </p>
+
+            <h1>
+                Edit Story
+            </h1>
 
 
-        <form
-            action="/posts/<%= post._id %>/edit"
-            method="POST"
-            enctype="multipart/form-data"
-        >
-
-
-            <label for="title">
-                Title
-            </label>
-
-            <input
-                type="text"
-                id="title"
-                name="title"
-                value="<%= post.title %>"
-                required
+            <form
+                action="/posts/<%= post._id %>/edit"
+                method="POST"
+                enctype="multipart/form-data"
+                class="post-form"
             >
 
 
-            <label for="content">
-                Content
-            </label>
+                <!-- TITLE -->
 
-            <textarea
-                id="content"
-                name="content"
-                rows="8"
-                required
-            ><%= post.content %></textarea>
+                <div>
 
+                    <label for="title">
+                        Title
+                    </label>
 
-            <label for="image">
-                Image
-            </label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="<%= post.title %>"
+                        placeholder="Give your story a title..."
+                        required
+                    >
 
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-            >
+                </div>
 
 
-            <% if (post.image) { %>
+                <!-- CONTENT -->
 
-                <p>
-                    Current image:
-                </p>
+                <div>
 
-                <img
-                    src="/assets/<%= post.image %>"
-                    alt="<%= post.title %>"
-                    width="300"
-                >
+                    <label for="content">
+                        Your Story
+                    </label>
 
-            <% } %>
+                    <textarea
+                        id="content"
+                        name="content"
+                        placeholder="Start writing your story..."
+                        required
+                    ><%= post.content %></textarea>
 
-
-            <button type="submit">
-                Update Post
-            </button>
+                </div>
 
 
-        </form>
+                <!-- CURRENT IMAGE -->
 
+                <% if (post.image) { %>
+
+                    <div class="current-post-image">
+
+                        <label>
+                            Current Image
+                        </label>
+
+                        <img
+                            src="/assets/<%= post.image %>"
+                            alt="<%= post.title %>"
+                        >
+
+                    </div>
+
+                <% } %>
+
+
+                <!-- NEW IMAGE -->
+
+                <div>
+
+                    <label for="image">
+                        Replace Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                    >
+
+                    <small class="image-help">
+                        Leave empty to keep the current image.
+                    </small>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="post-form-actions">
+
+                    <a
+                        href="/posts"
+                        class="cancel-button"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="publish-button"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
 
     </main>
-
 
 </body>
 

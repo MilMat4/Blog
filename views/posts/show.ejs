@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include("../partials/navbar") %>
+
+    <main class="story-page">
+
+        <article class="story-card">
+
+            <% if (post.image) { %>
+                <div class="story-image-wrap">
+                    <img
+                        src="<%= post.image.startsWith('http') ? post.image : '/assets/' + post.image %>"
+                        alt="<%= post.title %>"
+                    >
+                </div>
+            <% } else { %>
+                <div class="story-image-wrap story-no-image">
+                    <span>✦</span>
+                </div>
+            <% } %>
+
+            <div class="story-content">
+
+                <p class="article-label">FEATURED STORY</p>
+
+                <h1><%= post.title %></h1>
+
+                <div class="story-meta">
+                    <% if (post.author) { %>
+                        <span>By <strong><%= post.author.username %></strong></span>
+                    <% } else { %>
+                        <span>By <strong>Unknown author</strong></span>
+                    <% } %>
+
+                    <span>
+                        <%= new Date(post.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric"
+                        }) %>
+                    </span>
+                </div>
+
+                <div class="story-body">
+                    <%= post.content %>
+                </div>
+
+                <div class="story-actions">
+                    <a href="/posts" class="back-link">← Back to posts</a>
+
+                    <form action="/posts/<%= post._id %>/like" method="POST">
+                        <button type="submit" class="like-button">
+                            <% if (
+                                post.likes.some(id => id.toString() === session.userId.toString())
+                            ) { %>
+                                ♥
+                            <% } else { %>
+                                ♡
+                            <% } %>
+                            <%= post.likes.length %>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </article>
+
+    </main>
+</body>
+
+</html>

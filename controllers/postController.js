@@ -4,20 +4,132 @@ const fs = require("fs"); // Import the Node.js File System module to handle fil
 const path = require("path"); // Import the Node.js Path module to handle and transform file paths, ensuring compatibility across different operating systems
 
 
-const getAllPosts = async (req, res) => { // Define an asynchronous function to handle the request for retrieving all posts from the database
-    try {
-        const posts = await Post.find().populate("author"); // Retrieve all posts from the database and populate the "author" field with the corresponding user data from the User collection
+const getAllPosts = async (req, res) => {
 
-        res.render("posts/index", { // Render the "posts/index" view template and pass the retrieved posts data to it for display
-            posts: posts
+    try {
+
+        const posts = await Post.find()
+            .populate("author")
+            .sort({ createdAt: -1 });
+
+        const validPosts = posts.filter(post => post.author);
+
+
+        let featuredPost = null;
+
+
+        if (validPosts.length > 0) {
+
+            featuredPost = validPosts.reduce(
+                (mostLiked, post) => {
+
+                    if (
+                        !mostLiked ||
+                        post.likes.length > mostLiked.likes.length
+                    ) {
+                        return post;
+                    }
+
+                    return mostLiked;
+
+                },
+                null
+            );
+
+        }
+
+
+        const remainingPosts = validPosts.filter(
+            post =>
+                !featuredPost ||
+                post._id.toString() !== featuredPost._id.toString()
+        );
+
+
+        res.render("posts/index", {
+
+            posts: remainingPosts,
+
+            featuredPost: featuredPost,
+
+            isMyPosts: false
+
         });
 
+
     } catch (error) {
+
         console.log(error);
+
         res.status(500).send("Server Error");
+
     }
 };
 
+
+const getMyPosts = async (req, res) => {
+
+    try {
+
+        const posts = await Post.find({
+            author: req.session.userId
+        })
+            .populate("author")
+            .sort({ createdAt: -1 });
+
+        const validPosts = posts.filter(post => post.author);
+
+
+        let featuredPost = null;
+
+
+        if (validPosts.length > 0) {
+
+            featuredPost = validPosts.reduce(
+                (mostLiked, post) => {
+
+                    if (
+                        !mostLiked ||
+                        post.likes.length > mostLiked.likes.length
+                    ) {
+                        return post;
+                    }
+
+                    return mostLiked;
+
+                },
+                null
+            );
+
+        }
+
+
+        const remainingPosts = validPosts.filter(
+            post =>
+                !featuredPost ||
+                post._id.toString() !== featuredPost._id.toString()
+        );
+
+
+        res.render("posts/index", {
+
+            posts: remainingPosts,
+
+            featuredPost: featuredPost,
+
+            isMyPosts: true
+
+        });
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).send("Server Error");
+
+    }
+};
 
 const createPost = async (req, res) => {  // Define an asynchronous function to handle the creation of a new post in the database
     try {
@@ -187,11 +299,93 @@ const editPost = async (req, res) => { // Define an asynchronous function to han
     }
 };
 
+const getPostById = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id).populate("author");
+
+        if (!post) {
+            return res.status(404).send("Post not found");
+        }
+
+        res.render("posts/show", {
+            post: post
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Server Error");
+    }
+};
+
+const toggleLike = async (req, res) => {
+    try {
+
+        const post = await Post.findById(req.params.id);
+
+        if (!post) {
+            return res.status(404).send("Post not found");
+        }
+
+        const userId = req.session.userId.toString();
+
+        const alreadyLiked = post.likes.some(
+            id => id.toString() === userId
+        );
+
+        if (alreadyLiked) {
+
+            post.likes = post.likes.filter(
+                id => id.toString() !== userId
+            );
+
+        } else {
+
+            post.likes.push(req.session.userId);
+
+        }
+
+        await post.save();
+
+        res.redirect(req.get("Referrer") || "/posts");
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).send("Failed to update like");
+    }
+};
+
+const getHomePosts = async (req, res) => {
+    try {
+
+        const posts = await Post.find()
+            .populate("author")
+            .sort({ createdAt: -1 })
+            .limit(6);
+
+        const validPosts = posts.filter(post => post.author);
+
+        res.render("home", {
+            posts: validPosts
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).send("Server Error");
+    }
+};
 
 module.exports = {
     getAllPosts,
+    getMyPosts,
     createPost,
     deletePost,
     getEditPost,
-    editPost
+    editPost,
+    getPostById,
+    toggleLike,
+    getHomePosts
 };

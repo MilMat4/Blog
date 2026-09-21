@@ -10,100 +10,524 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Posts</title>
+    <title>
+        <%= isMyPosts ? "My Posts" : "Posts" %>
+    </title>
 
-    <link rel="stylesheet" href="/css/styles.css">
+    <link
+        rel="stylesheet"
+        href="/css/styles.css"
+    >
 
 </head>
 
 
 <body>
 
-
     <%- include("../partials/navbar") %>
 
 
     <main class="posts-page">
 
-        <h1>
-            Blog Posts
-        </h1>
+
+        <!-- PAGE HEADER -->
+
+        <div class="posts-heading">
+
+            <div>
+
+                <% if (isMyPosts) { %>
+
+                    <p class="posts-eyebrow">
+                        YOUR SPACE
+                    </p>
+
+                    <h1>
+                        My Stories
+                    </h1>
+
+                    <p class="posts-description">
+                        All the stories you've shared with the community.
+                    </p>
+
+                <% } else { %>
+
+                    <p class="posts-eyebrow">
+                        THE COMMUNITY
+                    </p>
+
+                    <h1>
+                        Latest Stories
+                    </h1>
+
+                    <p class="posts-description">
+                        Discover thoughts, ideas and stories from the community.
+                    </p>
+
+                <% } %>
+
+            </div>
 
 
-        <a
-            href="/posts/create"
-            class="hero-btn"
-        >
-            Create Post
-        </a>
+            <a
+                href="/posts/create"
+                class="hero-btn"
+            >
+                + Create Post
+            </a>
+
+        </div>
 
 
-        <% if (posts.length === 0) { %>
+        <!-- EMPTY STATE -->
 
-            <p>
-                No posts yet.
-            </p>
+        <% if (!featuredPost && posts.length === 0) { %>
+
+            <article class="empty-post">
+
+                <div class="empty-icon">
+                    ✦
+                </div>
+
+
+                <h2>
+                    No stories yet
+                </h2>
+
+
+                <% if (isMyPosts) { %>
+
+                    <p>
+                        You haven't shared anything yet.
+                    </p>
+
+                    <a
+                        href="/posts/create"
+                        class="hero-btn"
+                    >
+                        Create your first post
+                    </a>
+
+                <% } else { %>
+
+                    <p>
+                        Be the first person to share something with the community.
+                    </p>
+
+                    <a
+                        href="/posts/create"
+                        class="hero-btn"
+                    >
+                        Create the first post
+                    </a>
+
+                <% } %>
+
+            </article>
+
 
         <% } else { %>
 
 
-            <% posts.forEach(post => { %>
+            <!-- TRENDING POST -->
 
-                <article>
+            <% if (featuredPost) { %>
 
-
-                    <h2>
-                        <%= post.title %>
-                    </h2>
+                <article class="featured-post">
 
 
-                    <p>
-                        Posted by
-
-                        <strong>
-                            <%= post.author.username %>
-                        </strong>
-                    </p>
+                    <div class="featured-post-content">
 
 
-                    <p>
-                        <%= post.content %>
-                    </p>
+                        <p class="article-label">
+                            TRENDING
+                        </p>
 
 
-                    <% if (post.image) { %>
+                        <h2>
+                            <%= featuredPost.title %>
+                        </h2>
 
-                        <img
-                            src="/assets/<%= post.image %>"
-                            alt="<%= post.title %>"
+
+
+
+                        <!-- AUTHOR -->
+
+                        <% if (featuredPost.author) { %>
+
+                            <div class="featured-post-author">
+
+                                <div class="author-avatar">
+
+                                    <%= featuredPost.author.username
+                                        .charAt(0)
+                                        .toUpperCase() %>
+
+                                </div>
+
+
+                                <div class="author-info">
+
+                                    <strong>
+                                        <%= featuredPost.author.username %>
+                                    </strong>
+
+
+                                    <span>
+
+                                    <%= new Date(
+                                        featuredPost.createdAt
+                                    ).toLocaleDateString(
+                                        "en-US",
+                                        {
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric"
+                                        }
+                                    ) %>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="featured-post-author">
+
+                                <div class="author-avatar">
+                                    ?
+                                </div>
+
+                                <div class="author-info">
+                                    <strong>Unknown author</strong>
+                                </div>
+
+                            </div>
+
+                        <% } %>
+
+
+                        <!-- LIKES -->
+
+                        <div class="featured-like">
+
+                            <form
+                                action="/posts/<%= featuredPost._id %>/like"
+                                method="POST"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="like-button"
+                                >
+
+                                    <% if (
+                                        featuredPost.likes.some(
+                                            id => id.toString() === session.userId.toString()
+                                        )
+                                    ) { %>
+
+                                        ♥
+
+                                    <% } else { %>
+
+                                        ♡
+
+                                    <% } %>
+
+                                    <%= featuredPost.likes.length %>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                        <!-- OWNER ACTIONS -->
+
+                        <% if (
+                            featuredPost.author && (
+                                session.role === "superadmin" ||
+                                featuredPost.author._id.toString() === session.userId.toString()
+                            )
+                        ) { %>
+
+                            <div class="post-owner-actions">
+
+                                <a
+                                    href="/posts/<%= featuredPost._id %>/edit"
+                                    class="edit-button"
+                                >
+                                    Edit
+                                </a>
+
+
+                                <form
+                                    action="/posts/<%= featuredPost._id %>/delete"
+                                    method="POST"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="delete-button"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        <% } %>
+
+
+                        <a
+                            href="/posts/<%= featuredPost._id %>"
+                            class="read-story"
                         >
-
-                    <% } %>
-
-
-                    <a
-                        href="/posts/<%= post._id %>/edit"
-                    >
-                        Edit
-                    </a>
+                            Read Story →
+                        </a>
 
 
-                    <form
-                        action="/posts/<%= post._id %>/delete"
-                        method="POST"
-                    >
+                    </div>
 
-                        <button type="submit">
-                            Delete
-                        </button>
 
-                    </form>
+                    <!-- IMAGE -->
+
+                    <div class="featured-post-image">
+
+                        <% if (featuredPost.image) { %>
+
+                            <img
+                                src="<%= featuredPost.image && featuredPost.image.startsWith('http') ? featuredPost.image : '/assets/' + featuredPost.image %>"
+                                alt="<%= featuredPost.title %>"
+                                loading="lazy"
+                            >
+
+                        <% } else { %>
+
+                            <div class="featured-no-image">
+                                ✦
+                            </div>
+
+                        <% } %>
+
+                    </div>
 
 
                 </article>
 
+            <% } %>
 
-            <% }) %>
+
+            <!-- OTHER POSTS -->
+
+            <% if (posts.length > 0) { %>
+
+                <div class="editorial-post-grid">
+
+
+                    <% posts.forEach(post => { %>
+
+
+                        <article class="editorial-post">
+
+
+                            <!-- IMAGE -->
+
+                            <% if (post.image) { %>
+
+                                <div class="editorial-post-image">
+
+                                    <img
+                                        src="<%= post.image && post.image.startsWith('http') ? post.image : '/assets/' + post.image %>"
+                                        alt="<%= post.title %>"
+                                        loading="lazy"
+                                    >
+
+                                </div>
+
+                            <% } else { %>
+
+                                <div class="editorial-post-image editorial-no-image">
+                                    ✦
+                                </div>
+
+                            <% } %>
+
+
+                            <!-- CONTENT -->
+
+                            <div class="editorial-post-content">
+
+
+                                <p class="article-label">
+                                    ARTICLE
+                                </p>
+
+
+                                <h3>
+                                    <%= post.title %>
+                                </h3>
+
+
+
+
+                                <!-- AUTHOR -->
+
+                                <div class="editorial-post-footer">
+
+
+                                    <% if (post.author) { %>
+
+                                        <div class="editorial-author">
+
+                                            <div class="author-avatar">
+
+                                                <%= post.author.username
+                                                    .charAt(0)
+                                                    .toUpperCase() %>
+
+                                            </div>
+
+
+                                            <span>
+                                                <%= post.author.username %>
+                                            </span>
+
+                                        </div>
+
+                                    <% } else { %>
+
+                                        <div class="editorial-author">
+
+                                            <div class="author-avatar">
+                                                ?
+                                            </div>
+
+                                            <span>Unknown author</span>
+
+                                        </div>
+
+                                    <% } %>
+
+
+                                    <span class="editorial-date">
+
+                                        <%= new Date(
+                                            post.createdAt
+                                        ).toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                month: "short",
+                                                day: "numeric"
+                                            }
+                                        ) %>
+
+                                    </span>
+
+
+                                </div>
+
+
+                                <!-- LIKE -->
+
+                                <div class="editorial-like">
+
+                                    <form
+                                        action="/posts/<%= post._id %>/like"
+                                        method="POST"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="like-button"
+                                        >
+
+                                            <% if (
+                                                post.likes.some(
+                                                    id => id.toString() === session.userId.toString()
+                                                )
+                                            ) { %>
+
+                                                ♥
+
+                                            <% } else { %>
+
+                                                ♡
+
+                                            <% } %>
+
+                                            <%= post.likes.length %>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+
+                               <!-- OWNER ACTIONS -->
+
+<% if (
+    post.author && (
+        session.role === "superadmin" ||
+        post.author._id.toString() === session.userId.toString()
+    )
+) { %>
+
+    <div class="post-owner-actions">
+
+        <a
+            href="/posts/<%= post._id %>/edit"
+            class="edit-button"
+        >
+            Edit
+        </a>
+
+        <form
+            action="/posts/<%= post._id %>/delete"
+            method="POST"
+        >
+
+            <button
+                type="submit"
+                class="delete-button"
+            >
+                Delete
+            </button>
+
+        </form>
+
+    </div>
+
+<% } %>
+
+
+<!-- READ STORY -->
+
+<a
+    href="/posts/<%= post._id %>"
+    class="read-more"
+>
+    Read Story →
+</a>
+
+                            </div>
+
+
+                        </article>
+
+
+                    <% }) %>
+
+
+                </div>
+
+            <% } %>
 
 
         <% } %>

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,97 +12,150 @@
 
     <title>Manage Users</title>
 
-    <link rel="stylesheet" href="/css/styles.css">
+    <link
+        rel="stylesheet"
+        href="/css/styles.css"
+    >
+
 </head>
+
 
 <body>
 
     <%- include("../partials/navbar") %>
 
 
-    <main class="posts-page">
+    <main class="admin-page">
 
-        <h1>Manage Users</h1>
+        <div class="admin-heading">
 
-        <p>
-            View all registered users and their roles.
-        </p>
+            <div>
+
+                <p class="posts-eyebrow">
+                    ADMINISTRATION
+                </p>
+
+                <h1>
+                    Manage Users
+                </h1>
+
+                <p class="posts-description">
+                    View all registered users and their roles.
+                </p>
+
+            </div>
+
+        </div>
 
 
-        <% if (users.length === 0) { %>
+        <% if (users.length > 0) { %>
 
-            <article>
+            <div class="admin-table-wrapper">
 
-                <p>No users found.</p>
+                <table class="admin-table">
 
-            </article>
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <% users.forEach(user => { %>
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="admin-user">
+
+                                        <div class="admin-user-avatar">
+
+                                            <%= user.username
+                                                .charAt(0)
+                                                .toUpperCase() %>
+
+                                        </div>
+
+                                        <span>
+                                            <%= user.username %>
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    <%= user.email %>
+                                </td>
+
+
+                                <td>
+
+                                    <% if (user.role === "superadmin") { %>
+
+                                        <span class="admin-role admin-role-super">
+                                            Super Admin
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="admin-role">
+                                            User
+                                        </span>
+
+                                    <% } %>
+
+                                </td>
+
+                            </tr>
+
+                        <% }) %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
 
         <% } else { %>
 
+            <div class="empty-post">
 
-            <article class="users-table">
-
-                <!-- TABLE HEADER -->
-
-                <div class="user-row user-header">
-
-                    <div>
-                        Username
-                    </div>
-
-                    <div>
-                        Email
-                    </div>
-
-                    <div>
-                        Role
-                    </div>
-
+                <div class="empty-icon">
+                    ✦
                 </div>
 
+                <h2>
+                    No users found
+                </h2>
 
-                <!-- USERS -->
+                <p>
+                    There are currently no registered users.
+                </p>
 
-                <% users.forEach(user => { %>
-
-                    <div class="user-row">
-
-                        <div class="user-name">
-                            <%= user.username %>
-                        </div>
-
-
-                        <div class="user-email">
-                            <%= user.email %>
-                        </div>
-
-
-                        <div>
-
-                            <% if (user.role === "superadmin") { %>
-
-                                <span class="role superadmin">
-                                    Super Admin
-                                </span>
-
-                            <% } else { %>
-
-                                <span class="role">
-                                    User
-                                </span>
-
-                            <% } %>
-
-                        </div>
-
-                    </div>
-
-                <% }) %>
-
-            </article>
-
+            </div>
 
         <% } %>
+
 
     </main>
 

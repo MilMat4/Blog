@@ -8,21 +8,50 @@ const upload = require("../middleware/uploadMiddleware");
 
 const {
     getAllPosts,
+    getMyPosts,
     createPost,
     deletePost,
     getEditPost,
-    editPost
+    editPost,
+    getPostById,
+    toggleLike,
 } = require("../controllers/postController");
 
 
-router.get('/', requireAuth, getAllPosts);
+// =========================
+// ALL POSTS
+// =========================
+
+router.get(
+    '/',
+    requireAuth,
+    getAllPosts
+);
 
 
-router.get('/create', requireAuth, (req, res) => {
+// =========================
+// MY POSTS
+// IMPORTANT: Keep this BEFORE /:id/edit
+// =========================
 
-    res.render('posts/create');
+router.get(
+    '/my',
+    requireAuth,
+    getMyPosts
+);
 
-});
+
+// =========================
+// CREATE POST
+// =========================
+
+router.get(
+    '/create',
+    requireAuth,
+    (req, res) => {
+        res.render('posts/create');
+    }
+);
 
 
 router.post(
@@ -31,6 +60,23 @@ router.post(
     upload.single("image"),
     createPost
 );
+
+
+router.get(
+    "/:id",
+    getPostById
+);
+
+
+router.post(
+    "/:id/like",
+    requireAuth,
+    toggleLike
+);
+
+// =========================
+// EDIT POST
+// =========================
 
 
 router.get(
@@ -47,6 +93,10 @@ router.post(
     editPost
 );
 
+
+// =========================
+// DELETE POST
+// =========================
 
 router.post(
     "/:id/delete",

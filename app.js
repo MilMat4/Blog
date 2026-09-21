@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express'); // Import the Express library
 
 const session = require('express-session'); // Import express-session for session management
@@ -11,6 +13,8 @@ const authRoutes = require('./routes/authRoutes'); // Import authentication rout
 const postRoutes = require('./routes/postRoutes'); // Import post routes
 
 const adminRoutes = require("./routes/adminRoutes"); // Import admin routes
+
+const { getHomePosts } = require("./controllers/postController"); // Import home controller
 
 
 const app = express(); // Create Express application
@@ -67,11 +71,9 @@ app.use('/posts', postRoutes); // Post routes
 app.use("/admin", adminRoutes); // Admin routes
 
 
-app.get("/", (req, res) => {
+// Home page
 
-    res.render("home");
-
-});
+app.get("/", getHomePosts);
 
 
 app.listen(5000, () => {

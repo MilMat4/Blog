@@ -19,70 +19,112 @@
 
 <body>
 
-
     <%- include("../partials/navbar") %>
 
 
-    <main class="auth-page">
+    <main class="post-form-page">
 
-        <h1>
-            Create Post
-        </h1>
+        <div class="post-form-card">
+
+            <p class="posts-eyebrow">
+                SHARE YOUR THOUGHTS
+            </p>
+
+            <h1>
+                Create a New Story
+            </h1>
 
 
-        <form
-            action="/posts/create"
-            method="POST"
-            enctype="multipart/form-data"
-        >
-
-
-            <label for="title">
-                Title
-            </label>
-
-            <input
-                type="text"
-                id="title"
-                name="title"
-                required
+            <form
+                action="/posts/create"
+                method="POST"
+                enctype="multipart/form-data"
+                class="post-form"
             >
 
 
-            <label for="content">
-                Content
-            </label>
+                <!-- TITLE -->
 
-            <textarea
-                id="content"
-                name="content"
-                rows="8"
-                required
-            ></textarea>
+                <div>
 
+                    <label for="title">
+                        Title
+                    </label>
 
-            <label for="image">
-                Image
-            </label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Give your story a title..."
+                        required
+                    >
 
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-            >
+                </div>
 
 
-            <button type="submit">
-                Create Post
-            </button>
+                <!-- CONTENT -->
+
+                <div>
+
+                    <label for="content">
+                        Your Story
+                    </label>
+
+                    <textarea
+                        id="content"
+                        name="content"
+                        placeholder="Start writing your story..."
+                        required
+                    ></textarea>
+
+                </div>
 
 
-        </form>
+                <!-- IMAGE -->
 
+                <div>
+
+                    <label for="image">
+                        Add an Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                    >
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="post-form-actions">
+
+                    <a
+                        href="/posts"
+                        class="cancel-button"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="publish-button"
+                    >
+                        Publish Story
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
 
     </main>
-
 
 </body>
 

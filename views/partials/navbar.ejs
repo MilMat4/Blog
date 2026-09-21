@@ -1,3 +1,6 @@
+<div class="cursor-dot"></div>
+<div class="cursor-glow"></div>
+
 <nav class="navbar">
 
     <a href="/" class="logo">My Blog</a>
@@ -11,6 +14,11 @@
 
         <% if (session && session.userId) { %>
 
+            <a href="/posts/my">
+                My Posts
+            </a>
+
+
             <% if (session.role === "superadmin") { %>
 
                 <a href="/admin/users">
@@ -18,6 +26,7 @@
                 </a>
 
             <% } %>
+
 
             <a href="/logout">
                 Logout
@@ -38,3 +47,75 @@
     </div>
 
 </nav>
+
+<script>
+
+    const cursorDot =
+        document.querySelector(".cursor-dot");
+
+    const cursorGlow =
+        document.querySelector(".cursor-glow");
+
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let glowX = 0;
+    let glowY = 0;
+
+
+    document.addEventListener("mousemove", (event) => {
+
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        cursorDot.style.left = mouseX + "px";
+        cursorDot.style.top = mouseY + "px";
+
+    });
+
+
+    function animateCursor() {
+
+        glowX += (mouseX - glowX) * 0.12;
+        glowY += (mouseY - glowY) * 0.12;
+
+        cursorGlow.style.left = glowX + "px";
+        cursorGlow.style.top = glowY + "px";
+
+        requestAnimationFrame(animateCursor);
+
+    }
+
+
+    animateCursor();
+
+
+    const interactiveElements =
+        document.querySelectorAll(
+            "a, button, input, textarea, .post-card, .home-post-card"
+        );
+
+
+    interactiveElements.forEach((element) => {
+
+        element.addEventListener("mouseenter", () => {
+
+            cursorDot.classList.add("cursor-hover");
+
+            cursorGlow.classList.add("cursor-glow-hover");
+
+        });
+
+
+        element.addEventListener("mouseleave", () => {
+
+            cursorDot.classList.remove("cursor-hover");
+
+            cursorGlow.classList.remove("cursor-glow-hover");
+
+        });
+
+    });
+
+</script>

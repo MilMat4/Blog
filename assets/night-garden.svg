@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Night garden</title>
+  <desc id="desc">A moonlit garden with flowers and fireflies.</desc>
+  <rect width="1200" height="800" fill="#182b3d"/>
+  <circle cx="920" cy="155" r="92" fill="#f5e6b8"/>
+  <circle cx="960" cy="125" r="92" fill="#182b3d"/>
+  <g fill="#f5e6b8"><circle cx="190" cy="130" r="5"/><circle cx="310" cy="230" r="7"/><circle cx="560" cy="120" r="4"/><circle cx="760" cy="250" r="5"/><circle cx="1080" cy="310" r="6"/></g>
+  <path d="M0 570c130-110 250-80 385 0 140-130 270-105 410 0 155-135 285-105 405 0v230H0z" fill="#203f4b"/>
+  <path d="M0 650c150-100 300-55 430 20 120-90 250-80 390 0 130-85 260-70 380 0v130H0z" fill="#132c35"/>
+  <g stroke="#74aa77" stroke-width="14" fill="none"><path d="M230 700V505M370 700V545M560 730V520M780 720V500M980 720V550"/></g>
+  <g fill="#e88a68"><circle cx="230" cy="500" r="38"/><circle cx="370" cy="540" r="34"/><circle cx="560" cy="515" r="42"/><circle cx="780" cy="495" r="36"/><circle cx="980" cy="545" r="40"/></g>
+  <g fill="#f5d579"><circle cx="230" cy="500" r="13"/><circle cx="370" cy="540" r="11"/><circle cx="560" cy="515" r="14"/><circle cx="780" cy="495" r="12"/><circle cx="980" cy="545" r="13"/></g>
+</svg>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <%- include("../partials/navbar") %>
+
+    <main class="auth-page">
+        <div class="auth-card">
+            <p class="auth-eyebrow">VERIFY YOUR EMAIL</p>
+            <h1>Enter your code</h1>
+            <p class="auth-description">
+                We sent a six-digit verification code to your email. It expires in 10 minutes.
+            </p>
+
+            <form action="/verify-otp" method="POST">
+                <div class="auth-field">
+                    <label for="otp">Verification code</label>
+                    <input
+                        type="text"
+                        id="otp"
+                        name="otp"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="123456"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-button">Verify email</button>
+            </form>
+
+            <p class="auth-footer">
+                Entered the wrong email?
+                <a href="/signup">Start again</a>
+            </p>
+        </div>
+    </main>
+</body>
+
+</html>
